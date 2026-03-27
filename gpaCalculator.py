@@ -1,3 +1,4 @@
+import json
 
 def collect_student_info():
     name = input("Enter your full name: ")
@@ -77,7 +78,7 @@ while True:
 
 
 def collect_scores(courses):
-   scores = []
+   course_records = []
 #    Exam score
    for course in courses:
        while True:
@@ -117,9 +118,9 @@ def collect_scores(courses):
                print("Invalid input. Please enter a number.")
 
        # Calculate total score (60% of exam score + class assessment)
-       total_score = round((0.6 * exam_score) + class_assessment)
+       total_score = round((0.6 * exam_score) + class_assessment, 2)
 
-       scores.append({
+       course_records.append({
            "course": course,
            "exam_score": exam_score,
            "class_assessment": class_assessment,
@@ -127,5 +128,122 @@ def collect_scores(courses):
            "total_score": total_score
        })
    
-   return scores
-scores = collect_scores(courses)
+   return course_records
+course_records = collect_scores(courses)
+
+
+def get_grade_point(score):
+    if score >= 80:
+        return "A", 4.0
+    elif score >= 75:
+        return "A-", 3.75
+    elif score >= 70:
+        return "B+", 3.50
+    elif score >= 65:
+        return "B", 3.25
+    elif score >= 60:
+        return "B-", 3.00
+    elif score >= 55:
+        return "C+", 2.75
+    elif score >= 50:
+        return "C", 2.50
+    elif score >= 45:
+        return "C-", 2.00
+    elif score >= 40:
+        return "D", 1.50
+    else:
+        return "F", 0.00
+    
+
+def calculate_gpa(records):
+    total_quality_points = 0
+    total_credits = 0
+
+    print("\nCourse Results:")
+
+    for record in records:
+        score = record["total_score"]
+        credit = record["credits"]
+
+        grade, grade_point = get_grade_point(score)
+        quality_points = grade_point * credit
+        
+        total_quality_points += quality_points
+        total_credits += credit
+
+        print(f"{record['course']}: Total Score = {score}, Grade = {grade}, Grade Point = {grade_point}, Quality Point = {quality_points}")
+
+    if total_credits == 0:
+        return 0
+    
+    cgpa = total_quality_points / total_credits
+    return round(cgpa, 2)
+
+
+def determine_class(cgpa):
+    if cgpa >= 3.60:
+        return "First Class"
+    elif cgpa >= 3.00:
+        return "Second Class Upper"
+    elif cgpa >= 2.50:
+        return "Second Class Lower"
+    elif cgpa >= 2.00:
+        return "Third Class"
+    else:
+        return "Fail"
+
+
+cgpa = calculate_gpa(course_records)
+class_type = determine_class(cgpa)
+print("\n========== FINAL RESULT ==========")
+print(f"Name: {name}")
+print(f"Semester: {sem}")
+print(f"Cumulative GPA (CGPA): {cgpa}")
+print(f"Class: {class_type}")
+
+def save_results(name, sem, course_records, cgpa, class_type):
+    data = {
+        "name": name,
+        "semester": sem,
+        "courses": [],
+        "cgpa": cgpa,
+        "class": class_type
+    }
+
+    # Build course list
+    for record in course_records:
+        grade, grade_point = get_grade_point(record["total_score"])
+
+        data["courses"].append({
+            "course": record["course"],
+            "exam_score": record["exam_score"],
+            "class_assessment": record["class_assessment"],
+            "credits": record["credits"],
+            "total_score": record["total_score"],
+            "grade": grade,
+            "grade_point": grade_point
+        })
+
+        # load existing data from JSON file if it exists, otherwise start with an empty list
+        try:
+            with open("gpa_results.json", "r") as file:
+                existing_data = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            existing_data = []
+
+        # Remove duplicate (Same name + same sem)
+        existing_data = [
+            entry for entry in existing_data
+            if not (entry["name"] == name and entry["semester"] == sem)
+        ]
+
+        # append new data to existing data
+        existing_data.append(data)
+
+        # save updated data back to JSON file
+        with open("gpa_results.json", "w") as file:
+            json.dump(existing_data, file, indent=4)
+
+    print("\nResults saved to gpa_results.json")
+
+save_results(name, sem, course_records, cgpa, class_type)

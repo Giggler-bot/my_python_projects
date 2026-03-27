@@ -1,0 +1,73 @@
+[
+    {
+        "name": "Giggler Obed",
+        "semester": "First",
+        "courses": [
+            {
+                "course": "Cal",
+                "exam_score": 80.0,
+                "class_assessment": 30.0,
+                "credits": 2,
+                "total_score": 78.0,
+                "grade": "A-",
+                "grade_point": 3.75
+            },
+            {
+                "course": "Eng",
+                "exam_score": 77.0,
+                "class_assessment": 35.0,
+                "credits": 2,
+                "total_score": 81.2,
+                "grade": "A",
+                "grade_point": 4.0
+            },
+            {
+                "course": "French",
+                "exam_score": 65.0,
+                "class_assessment": 35.0,
+                "credits": 2,
+                "total_score": 74.0,
+                "grade": "B+",
+                "grade_point": 3.5
+            },
+            {
+                "course": "Algebra",
+                "exam_score": 75.0,
+                "class_assessment": 30.0,
+                "credits": 2,
+                "total_score": 75.0,
+                "grade": "A-",
+                "grade_point": 3.75
+            },
+            {
+                "course": "Java",
+                "exam_score": 85.0,
+                "class_assessment": 35.0,
+                "credits": 2,
+                "total_score": 86.0,
+                "grade": "A",
+                "grade_point": 4.0
+            },
+            {
+                "course": "Python",
+                "exam_score": 80.0,
+                "class_assessment": 30.0,
+                "credits": 2,
+                "total_score": 78.0,
+                "grade": "A-",
+                "grade_point": 3.75
+            },
+            {
+                "course": "FOC",
+                "exam_score": 70.0,
+                "class_assessment": 30.0,
+                "credits": 2,
+                "total_score": 72.0,
+                "grade": "B+",
+                "grade_point": 3.5
+            }
+        ],
+        "cgpa": 3.75,
+        "class": "First Class"
+    }
+]
